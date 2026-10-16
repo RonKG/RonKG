@@ -2,7 +2,7 @@
 
 Nashville, TN · [wahomeron@gmail.com](mailto:wahomeron@gmail.com) · [linkedin.com/in/ronaldwahome](https://www.linkedin.com/in/ronaldwahome/)
 
-Most of this work is in Kenya. Under it is one idea: an economy can only use what it can read. A gazette still trapped in a scan, a company a lender cannot check, a listing a buyer cannot trust. Each is an opportunity that has not opened yet. I digitize that layer so someone can look it up and act. Kenya is the case study: one place, carried far enough to show the value that unlocks when a closed record can be used. The method is the same in any market where the records are closed.
+Most of this work is in Kenya. Markets like it have not had the digitization Western economies already run on, so the value still sits in a scan, a register, or a listing nobody can trust. An economy can only use what it can read. The goal is to unlock that value in a way that belongs to the market itself. Kenya is the case study, carried far enough to show what opens.
 
 Four projects from the last year, all my own. The source is private. I can walk through the design on a call.
 
