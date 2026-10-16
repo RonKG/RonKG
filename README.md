@@ -10,14 +10,14 @@ Four projects from the last year, all my own. The source is private. I can walk 
 
 Banks, fintechs, and law firms need a faster read on whether a Kenyan company is risky to onboard, short of a full manual due-diligence file. BRIA answers that from public records: court decisions, gazette notices, regulatory registers, and news. Every flag cites the record it came from.
 
+I ran it as a sequence of deliveries. Pipelines land regulatory files, gazette extracts, court records, and news in Postgres, in a form that can be rerun. Where the source is a scan or a block of prose, a model does the reading: OCR on gazette pages, parties and outcomes pulled from court text, news marked adverse or not. The extract stays tied to the source row. Names are then resolved into companies and people, and only then does someone get a result: an API call, a PDF that can sit in an onboarding file, or a lookup on the dashboard. A stage had to check out before the next one started.
+
 What is live:
 
 - A REST API for company risk lookups
 - PDF risk reports
 - An internal lookup dashboard
 - A marketing site and live demo at [bria.co.ke](https://bria.co.ke)
-
-Public sources are collected, resolved into companies and people, then turned into a cited risk result. The API, reports, and site sit on top of that.
 
 **Stack:** Python, FastAPI, PostgreSQL, Streamlit, Cloudflare, Railway
 
@@ -31,14 +31,9 @@ Source is private. The demo on the site is the public view.
 
 ## Kenya Gazette parsing
 
-The Kenya Gazette is a scanned public record. Useful notices (winding-up, director changes, procurement) are locked in PDFs. I built parsers that turn an issue into structured notices a downstream product can store and cite.
+The Kenya Gazette is a scanned public record. Useful notices (winding-up, director changes, procurement) are locked in PDFs. This is the ingestion step: an issue goes in, and structured notices come out that a later product can store and cite.
 
-Two paths, used for different scan qualities:
-
-- A layout parser that reads a PDF into a validated set of notices, with a confidence score on the document
-- An OCR pipeline for scans, which keeps the raw OCR output as the audit copy and writes a cleaned notice bundle from it
-
-BRIA consumes this output. The parsers also stand on their own.
+Two paths, chosen by the scan. A layout model reads a cleaner PDF into a validated set of notices and scores its own confidence. A heavier OCR path handles the rest, keeps the raw model output as the audit copy, and writes a cleaned notice bundle from it. Both leave through the same JSON contract, so the load downstream does not care which model read the page. BRIA is the main consumer. The parsers also stand on their own.
 
 **Stack:** Python, Docling, Mistral OCR, JSON Schema
 
@@ -46,11 +41,11 @@ Source is private. I can walk through the document contract and a sample issue o
 
 ## Kenya real-estate market signals
 
-A neighborhood-level read on listing prices in Kenya, built to answer whether the data is stable enough to say if prices are rising or falling in a given area.
+A neighborhood-level read on listing prices in Kenya. The question came first: is the series stable enough to say whether prices are rising or falling in a given area.
 
-About 312,000 listings from April through December 2025. Almost all of them had a price. About 1.4% were dropped because the price was implausible. That left 50 neighborhoods with 500 or more listings, which is enough to track a typical price, and another set of neighborhoods with a thinner but usable count.
+About 312,000 listings from April through December 2025 went into Postgres. Almost all of them had a price. About 1.4% were dropped because the price was implausible, and that rule was fixed before any trend was drawn. Neighborhoods with 500 or more listings, about 50 of them, are the ones thick enough to track a typical price. Thinner markets stay in the set, with a wider band of doubt.
 
-Over that window, typical prices across the market rose about 38%. Eight of the ten most active neighborhoods rose. Kilimani, Westlands, and Kileleshwa were the deepest markets.
+The finding is the deliverable. Over that window, typical prices across the market rose about 38%. Eight of the ten most active neighborhoods rose. Kilimani, Westlands, and Kileleshwa were the deepest markets. The chart sits behind that sentence.
 
 **Stack:** PostgreSQL, Python, Jupyter, Plotly
 
@@ -58,9 +53,9 @@ Source is private. I can walk through the cleaning rules and the neighborhood cu
 
 ## The Registry
 
-A product site for a curated Kenya property listing, aimed at buyers who have to judge a home from abroad. The promise is verification plus presentation: listings, a market heatmap, and short market notes, in one Next.js app deployed on Vercel.
+A product site for a curated Kenya property listing, aimed at buyers who have to judge a home from abroad. This one is about how an insight gets shown. A listing, a density map of Nairobi, and a short market note have to be readable by someone who will not open the notebook.
 
-The pages are built and deployed. Listings on the site are samples, used to show the presentation, not a live inventory.
+The pages are built and deployed. The figures on them are samples, used to test whether the insight is readable. The measured price work is the study above.
 
 **Stack:** Next.js, React, Vercel
 
@@ -70,7 +65,7 @@ Live site: [verity-site-iota.vercel.app](https://verity-site-iota.vercel.app)
 
 I was shopping for a Porsche with $60,000 all-in for the winning bid and the auction fee, and I wanted a 911 Carrera S or better, or a six-cylinder Cayman. The auction sites make that search misleading. A base Carrera, a flat-4 Cayman, and a GT car all show up in the same list, and a live bid is not a sale.
 
-So I wrote the rules down first, then priced only the cars that passed them. The budget is the hammer plus the Cars & Bids buyer fee (5%, capped), which puts the real bid ceiling near $57,100. Tax, title, and shipping sit outside that. Sold prices and live bids stay in separate files, because a car that has not sold is not a comp. Each pass is a dated snapshot: the same fields, the older files left in place, so the next pull can say what changed.
+So I wrote the rules down first, then priced only the cars that passed them. The budget is the hammer plus the Cars & Bids buyer fee (5%, capped), which puts the real bid ceiling near $57,100. Tax, title, and shipping sit outside that. Sold hammers went into a fixed schema. Live bids stayed out of the medians, because a car that has not sold is not a comp. Each pass is a dated snapshot with the older files left in place, so the next pull is a comparison.
 
 The 4 October 2026 Cars & Bids snapshot is the one in the repo. The car that fits is a 2014–2016 Cayman S: median hammer $44,000, and 19 of 21 recent sales were inside the cap. A manual costs more (median $54,750) and a PDK less (median $38,250). A sorted 991 Carrera S is a different purchase. Coupes in that set median $72,250.
 
