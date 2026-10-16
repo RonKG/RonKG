@@ -4,7 +4,7 @@ Nashville, TN · [wahomeron@gmail.com](mailto:wahomeron@gmail.com) · [linkedin.
 
 Most of this work is in Kenya. Markets like it have not had the digitization Western economies already run on, so the value still sits in a scan, a register, or a listing nobody can trust. An economy can only use what it can read. The goal is to unlock that value in a way that belongs to the market itself. Kenya is the case study, carried far enough to show what opens.
 
-Five projects from the last year, all my own. Where the source is private, I can walk through the design on a call.
+These are the five projects from the last year I want to highlight, all my own. There is more in my repositories, much of it private. Where the source is private, I can walk through the design on a call.
 
 ## BRIA — business risk checks for Kenyan companies
 
